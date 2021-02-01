@@ -3,6 +3,8 @@ package com.spring.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+
 @SpringBootApplication
 public class JpaApplication {
 
@@ -23,16 +25,15 @@ public class JpaApplication {
 
         Member member = new Member();
         member.setUsername("member1");
-//        member.setTeamId(team.getId());
         member.setTeam(team);
         memberRepository.save(member);
 
-
-        // 조회
-        // 기존) member를 찾고 member의 teamid를 찾아서 team을 찾았음.
-        // 이후) member를 찾고 member의 team을 찾음
         Member findMember = memberRepository.findById(member.getId()).get();
-        Team findTeam = findMember.getTeam();
-        System.out.println("findTeam = " + findTeam.getName());
+        List<Member> members = findMember.getTeam().getMembers(); // member에서 team을 찾고 team의 member를 찾는다.
+
+        for (Member m : members) {
+            System.out.println("member = " + m.getUsername());
+        }
+
     }
 }
