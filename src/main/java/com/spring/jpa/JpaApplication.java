@@ -28,6 +28,12 @@ public class JpaApplication {
         member.setTeam(team);
         memberRepository.save(member);
 
+        Member member2 = new Member();
+        member2.setUsername("member2");
+        member2.setTeam(team);
+        memberRepository.save(member2);
+
+        System.out.println("------------------------------------------");
         Member findMember = memberRepository.findById(member.getId()).get();
         List<Member> members = findMember.getTeam().getMembers(); // member에서 team을 찾고 team의 member를 찾는다.
 
