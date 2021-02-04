@@ -10,14 +10,15 @@ import javax.persistence.*;
 @Getter
 public class Member {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
 
     @Column(name = "USERNAME")
     private String username;
 
-    // 일대일 단방향
+
     @OneToOne
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
