@@ -6,6 +6,9 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -17,6 +20,9 @@ public class Product {
     private Long id;
 
     private String name;
+
+    @ManyToMany(mappedBy = "products")
+    private List<Member> members = new ArrayList<>();
 
 
 }
