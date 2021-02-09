@@ -6,17 +6,18 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@DiscriminatorColumn // DTYPE 에 테이블 명을 넣는다
 @Setter
 @Getter
-public abstract class Item {
+public class Member extends BaseEntity{
 
     @Id
     @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     private String name;
-    private int price;
 
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 }

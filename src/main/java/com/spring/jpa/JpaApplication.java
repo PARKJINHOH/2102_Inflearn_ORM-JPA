@@ -3,6 +3,8 @@ package com.spring.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
+
 @SpringBootApplication
 public class JpaApplication {
 
@@ -10,29 +12,16 @@ public class JpaApplication {
         SpringApplication.run(JpaApplication.class, args);
     }
 
-    private MovieRepository movieRepository;
+    private MemberRepository memberRepository;
 
-    public JpaApplication(MovieRepository movieRepository) {
-        this.movieRepository = movieRepository;
+    public JpaApplication(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
 
-        Movie movie = new Movie();
-        movie.setDirector("디렉터");
-        movie.setActor("엑터");
-        movie.setName("영화이름");
-        movie.setPrice(10000);
-
-        movieRepository.save(movie);
-
-
-
-        // 조회
-        System.out.println("=======================");
-        movieRepository.findById(movie.getId());
-
-
+        Member member = new Member();
+        member.setName("user1");
+        member.setCreatedBy("kim");
+        member.setCreatedDate(LocalDateTime.now());
+        memberRepository.save(member);
 
     }
-
-
-
 }
