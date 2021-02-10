@@ -21,24 +21,19 @@ public class JpaApplication {
         member.setName("user1");
         memberRepository.save(member);
 
+        // Member를 조회하면 select에 Team까지 Join문 쿼리가 출력된다.
+        //    @ManyToOne
+        //    @JoinColumn(name = "TEAM_ID")
+        //    private Team team;
 
-        // find() 메소드를 사용하면 reference를 호출하는 시점에 select 쿼리가 출력이 된다.
+        // FetchType.LAZY를 설정하면 Member만 조회한다.
+        //    @ManyToOne(fetch = FetchType.LAZY)
+        //    @JoinColumn(name = "TEAM_ID")
+        //    private Team team;
         Member findMember = memberRepository.findById(member.getId()).get();
-        // --여기까지 실행하면 select 쿼리가 실행된다. --
         System.out.println(findMember.getId());
         System.out.println(findMember.getName());
-        // --여기까지 실행하면 select 쿼리가 실행된다. --
 
-
-        // EntityManager의 getReference = JpaRepositocy의 getOne과 동일하다.
-
-        Member findMember2 = memberRepository.getOne(member.getId());
-        System.out.println(findMember2.getClass());
-
-        // --여기까지 실행하면 select 쿼리가 실행이 안된다. --
-        // System.out.println(findMember.getId());
-        // System.out.println(findMember.getName());
-        // --여기까지 실행하면 select 쿼리가 실행된다. --
 
     }
 }
