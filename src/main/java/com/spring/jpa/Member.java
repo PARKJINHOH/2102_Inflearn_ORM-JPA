@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Getter
-public class Member extends BaseEntity{
+public class Member{
 
     @Id
     @GeneratedValue
