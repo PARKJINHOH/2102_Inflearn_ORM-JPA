@@ -2,5 +2,5 @@ package com.spring.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface ChildRepository extends JpaRepository<Child, Long> {
 }

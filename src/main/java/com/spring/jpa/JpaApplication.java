@@ -11,32 +11,23 @@ public class JpaApplication {
         SpringApplication.run(JpaApplication.class, args);
     }
 
-    private MemberRepository memberRepository;
-    private TeamRepository teamRepository;
+    private ChildRepository childRepository;
+    private ParentRepository parentRepository;
 
-    public JpaApplication(MemberRepository memberRepository, TeamRepository teamRepository) {
-        this.memberRepository = memberRepository;
-        this.teamRepository = teamRepository;
+    public JpaApplication(ChildRepository childRepository, ParentRepository parentRepository) {
+        this.childRepository = childRepository;
+        this.parentRepository = parentRepository;
 
-        Team team = new Team();
-        team.setName("team1");
-        teamRepository.save(team);
+        Child child1 = new Child();
+        Child child2 = new Child();
 
-        Member member = new Member();
-        member.setName("user1");
-        member.setTeam(team);
-        memberRepository.save(member);
+        Parent parent = new Parent();
+        parent.addChild(child1);
+        parent.addChild(child2);
 
-        Member findMember = memberRepository.findById(member.getId()).get();
-        System.out.println(findMember.getId());
-        System.out.println(findMember.getName());
-
-        // 그러면 필요할 때만 가지고 오고 싶어할 때 프록시를 생각하면 된다.
-        System.out.println("findMember.class = " + findMember.getTeam().getClass());
-        System.out.println("=========================================");
-
-        // 프록시 조회가 아님.
-        System.out.println(findMember.getClass());
+        parentRepository.save(parent);
+//        childRepository.save(child1);
+//        childRepository.save(child2);
 
     }
 
