@@ -11,24 +11,20 @@ public class JpaApplication {
         SpringApplication.run(JpaApplication.class, args);
     }
 
-    private ChildRepository childRepository;
-    private ParentRepository parentRepository;
 
-    public JpaApplication(ChildRepository childRepository, ParentRepository parentRepository) {
-        this.childRepository = childRepository;
-        this.parentRepository = parentRepository;
+    private MemberRepository memberRepository;
 
-        Child child1 = new Child();
-        Child child2 = new Child();
+    public JpaApplication(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
 
-        Parent parent = new Parent();
-        parent.addChild(child1);
-        parent.addChild(child2);
 
-        parentRepository.save(parent);
-//        childRepository.save(child1);
-//        childRepository.save(child2);
+        Member member = new Member();
+        member.setUsername("member1");
+        member.setHomeAddress(new Address("city","street","10"));
+        member.setWorkPeriod(new Period());
+
+        memberRepository.save(member);
+
 
     }
-
 }
