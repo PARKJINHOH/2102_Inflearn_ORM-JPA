@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,22 +22,26 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    // 기간
-    @Embedded // Period의 @Embeddable 둘 중 하나만 사용해도 무관
-    private Period workPeriod;
-
-    // 주소
     @Embedded
     private Address homeAddress;
 
-    // 속성 재정의 (한 Entity에서 같은 값 타입을 사용하려 할 때 )
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
-            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
-            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
-    })
-    private Address workAddress;
+    @ElementCollection
+    // 값타입 컬렉션이다.
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns =
+        @JoinColumn(name = "MEMBER_ID")
+    )
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
 
+    // 값타입 컬렉션 -> 정말 단순할 떄 사용, 조금이라도 변경, 수정이 있다면 아래처럼 Entity로 뽑아 사용하기
+//    @ElementCollection
+//    @CollectionTable(name = "ADDRESS", joinColumns =
+//        @JoinColumn(name = "MEMBER_ID")
+//    )
+//    private List<Address> addressHistory = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 
 }
