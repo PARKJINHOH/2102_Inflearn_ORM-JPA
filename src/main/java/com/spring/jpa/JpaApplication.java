@@ -3,7 +3,12 @@ package com.spring.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -16,35 +21,50 @@ public class JpaApplication {
 
 
     private MemberRepository memberRepository;
+    private EntityManager em;
 
-    public JpaApplication(MemberRepository memberRepository) {
+    public JpaApplication(MemberRepository memberRepository, EntityManager em) {
         this.memberRepository = memberRepository;
+        this.em = em;
 
-        Member member = new Member();
-        member.setUsername("member1");
-        member.setHomeAddress(new Address("homeCity","street","10000"));
+        //JPQL
+        // @Query("select m from Member m where m.username like '%kim%'")
+        List<Member> byMemberName = memberRepository.findByMemberName();
 
-        //Collection
-        member.getFavoriteFoods().add("치킨");
-        member.getFavoriteFoods().add("족발");
-        member.getFavoriteFoods().add("피자");
+        System.out.println("===============================");
 
-//        member.getAddressHistory().add(new Address("old1","street","10000"));
-//        member.getAddressHistory().add(new Address("old2","street","10000"));
+        // Criteria
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> query = cb.createQuery(Member.class);
 
-        memberRepository.save(member);
-        memberRepository.flush();
+        // 쿼리를 코드로 작성
+        Root<Member> m = query.from(Member.class);
+        CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
+        List<Member> resultList = em.createQuery(cq).getResultList();
 
-        System.out.println("===========================");
-        Member findMember = memberRepository.findById(member.getId()).get();
+        System.out.println("===============================");
 
-        System.out.println("===========================");
+        // QueryDSL
+        // 세팅이 조금 필요하다.
 
-        // 치킨 -> 한식
-        findMember.getFavoriteFoods().remove("치킨");
-        findMember.getFavoriteFoods().add("한식");
 
-        System.out.println("===========================");
+
+        // 네이티브 SQL
+        List resultList1 = em.createNativeQuery("select MEMBER_ID, city from MEMBER").getResultList();
+
+        // JDBC 주의사항
+        Member member = new member();
+        member.setUsername("member");
+        em.persist(member);
+
+        em.flush();
+        // em.flush()를 하지 않으면 db에 값이 없기 때문에 결과는 0
+
+        // dbconn.excuteQuery("select * from member");
+        for(Member member1 : resultList){
+            System.out.println("member1 = " + member1);
+        }
+        tx.commit;
 
     }
 }
