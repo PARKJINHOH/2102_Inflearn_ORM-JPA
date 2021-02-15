@@ -6,18 +6,24 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "ORDERS")
 @Getter
 @Setter
-public class Member {
+public class Order {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String username;
-    private int age;
+    private int orderAmount;
+
+    @Embedded
+    private Address address;
 
     @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
+
+
+
 
 }

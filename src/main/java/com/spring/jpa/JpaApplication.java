@@ -3,21 +3,24 @@ package com.spring.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
 
 @SpringBootApplication
-@Transactional
 public class JpaApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JpaApplication.class, args);
     }
 
-
     private MemberRepository memberRepository;
-    private EntityManager em;
 
+    public JpaApplication(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
 
+        Member member = new Member();
+        member.setUsername("member1");
+        memberRepository.save(member);
+
+        // 기본문법 블로그 참조
+        // https://adg0609.tistory.com/37
+    }
 }
