@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a735d63-136a-44fe-b413-1c51419f66e7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/jpa/JpaMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jpa/JpaMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/jpa/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jpa/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/jpa/JpaMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/jpa/JpaMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/jpa/Member.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/jpa/Member.class" afterDir="false" />
-    </list>
+    <list default="true" id="3a735d63-136a-44fe-b413-1c51419f66e7" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,19 +69,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.JpaMain" />
@@ -102,7 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1613435527011</updated>
       <workItem from="1613435528230" duration="1230000" />
-      <workItem from="1613436809195" duration="7257000" />
+      <workItem from="1613436809195" duration="7998000" />
     </task>
     <servers />
   </component>
