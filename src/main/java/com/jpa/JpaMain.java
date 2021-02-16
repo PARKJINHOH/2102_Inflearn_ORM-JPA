@@ -16,7 +16,7 @@ public class JpaMain {
         try {
             tx.begin();
 
-            logic1(em);
+            logic2(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -28,27 +28,71 @@ public class JpaMain {
     }
 
     private static void logic1(EntityManager em) {
-        System.out.println("==========페이징===========");
+        System.out.println("==========조인===========");
 
-        for (int i = 0; i < 100; i++) {
-            Member member = new Member();
-            member.setUsername("member" + i);
-            member.setAge(i);
-            em.persist(member);
-        }
+        Team team = new Team();
+        team.setName("TeamA");
+        em.persist(team);
+
+        Member member = new Member();
+        member.setUsername("member1");
+        member.setUsername("TeamA"); // theat join 예제
+        member.setAge(10);
+        member.setTeam(team);
+
+        em.persist(member);
 
         em.flush();
         em.clear();
 
-        List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
-                .setFirstResult(0)
-                .setMaxResults(10)
-                .getResultList();
+        String left_join = "select m from Member m left join m.team";
+        String inner_join = "select m from Member m inner join m.team";
+        String theta_join = "select m from Member m, Team t where m.username = t.name";
+        List<Member> resultList = em.createQuery(theta_join, Member.class).getResultList();
+    }
 
-        System.out.println("resultList.size = " + resultList.size());
-        for (Member member1 : resultList) {
-            System.out.println("member1 = " + member1);
-        }
 
+    private static void logic2(EntityManager em) {
+        System.out.println("==========조인 대상 필터링(on)===========");
+
+        Team team = new Team();
+        team.setName("TeamA");
+        em.persist(team);
+
+        Member member = new Member();
+        member.setUsername("member1");
+        member.setUsername("TeamA"); // theat join 예제
+        member.setAge(10);
+        member.setTeam(team);
+
+        em.persist(member);
+
+        em.flush();
+        em.clear();
+
+        String leftJoin = "select m from Member m left join m.team t on t.name = 'A'";
+        List<Member> resultList = em.createQuery(leftJoin, Member.class).getResultList();
+    }
+
+    private static void logic3(EntityManager em) {
+        System.out.println("==========연관관계 없는 조인(on)===========");
+
+        Team team = new Team();
+        team.setName("TeamA");
+        em.persist(team);
+
+        Member member = new Member();
+        member.setUsername("member1");
+        member.setUsername("TeamA"); // theat join 예제
+        member.setAge(10);
+        member.setTeam(team);
+
+        em.persist(member);
+
+        em.flush();
+        em.clear();
+
+        String leftJoin = "select m from Member m left join Team t on m.username = t.name";
+        List<Member> resultList = em.createQuery(leftJoin, Member.class).getResultList();
     }
 }
