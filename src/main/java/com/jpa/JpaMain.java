@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -16,7 +17,7 @@ public class JpaMain {
         try {
             tx.begin();
 
-            logic2(em);
+            logic1(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -28,71 +29,39 @@ public class JpaMain {
     }
 
     private static void logic1(EntityManager em) {
-        System.out.println("==========조인===========");
+        System.out.println("==========경로 표현식 특징===========");
 
-        Team team = new Team();
-        team.setName("TeamA");
-        em.persist(team);
+        Member member1 = new Member();
+        member1.setUsername("관리자1");
+        em.persist(member1);
 
-        Member member = new Member();
-        member.setUsername("member1");
-        member.setUsername("TeamA"); // theat join 예제
-        member.setAge(10);
-        member.setTeam(team);
-
-        em.persist(member);
+        Member member2 = new Member();
+        member2.setUsername("관리자1");
+        em.persist(member2);
 
         em.flush();
         em.clear();
 
-        String left_join = "select m from Member m left join m.team";
-        String inner_join = "select m from Member m inner join m.team";
-        String theta_join = "select m from Member m, Team t where m.username = t.name";
-        List<Member> resultList = em.createQuery(theta_join, Member.class).getResultList();
-    }
+        // 상태필드 username에서 더이상 참조할 수 있는게 없다.
+        String query1 = "select m.username from Member m";
+//        List<String> result = em.createQuery(query1, String.class).getResultList();
 
+        // 묵시적인 내부 조인 발생 ** 중요, 탐색이 가능하다. m.team.name
+        String query2 = "select m.team from Member m";
+//        List<Team> teamResult = em.createQuery(query2, Team.class).getResultList();
 
-    private static void logic2(EntityManager em) {
-        System.out.println("==========조인 대상 필터링(on)===========");
+        // 묵시적 내부 조인 발생, 탐색이 안된다.
+        String query3 = "select t.members from Team t";
+        // From절에서 명시적으로 조인을 통해 탐색이 가능하다.
+        String query31 = "select m.team.name from Team t join t.members m";
+        List result = em.createQuery(query31, Collection.class).getResultList();
 
-        Team team = new Team();
-        team.setName("TeamA");
-        em.persist(team);
+        /*
+        [결론]
+         * 가급적 경로 표현식은 사용하지 않는게 좋다.
+         * 묵시적 조인이 일어나기 때문이다.
+         * 명시적(join 키워드를 직접 입력) 조인을 해야 튜닝하기도 쉽다.
+         */
 
-        Member member = new Member();
-        member.setUsername("member1");
-        member.setUsername("TeamA"); // theat join 예제
-        member.setAge(10);
-        member.setTeam(team);
-
-        em.persist(member);
-
-        em.flush();
-        em.clear();
-
-        String leftJoin = "select m from Member m left join m.team t on t.name = 'A'";
-        List<Member> resultList = em.createQuery(leftJoin, Member.class).getResultList();
-    }
-
-    private static void logic3(EntityManager em) {
-        System.out.println("==========연관관계 없는 조인(on)===========");
-
-        Team team = new Team();
-        team.setName("TeamA");
-        em.persist(team);
-
-        Member member = new Member();
-        member.setUsername("member1");
-        member.setUsername("TeamA"); // theat join 예제
-        member.setAge(10);
-        member.setTeam(team);
-
-        em.persist(member);
-
-        em.flush();
-        em.clear();
-
-        String leftJoin = "select m from Member m left join Team t on m.username = t.name";
-        List<Member> resultList = em.createQuery(leftJoin, Member.class).getResultList();
     }
 }
